@@ -6,7 +6,7 @@
 import { GoogleGenAI, Modality, Part, GenerateContentResponse } from '@google/genai';
 
 // Initialize the Google Gemini AI client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_PUBLIC_API_KEY! });
 
 // --- Helper Functions ---
 

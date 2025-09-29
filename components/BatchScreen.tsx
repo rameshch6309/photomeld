@@ -166,6 +166,7 @@ const BatchScreen: React.FC<BatchScreenProps> = ({
             <button onClick={handleDownloadZip} disabled={!allDone || isLoading || doneCount === 0} className="w-full flex items-center justify-center gap-3 bg-gradient-to-br from-green-600 to-green-500 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 ease-in-out shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/40 hover:-translate-y-px active:scale-95 active:shadow-inner text-base disabled:from-green-800 disabled:to-green-700 disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none">
                 <DownloadIcon className="w-6 h-6"/> Download All as ZIP
             </button>
+        </div>
         </aside>
 
       {/* Image Grid */}

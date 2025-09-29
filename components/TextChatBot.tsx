@@ -23,9 +23,9 @@ const TextChatBot: React.FC<TextChatBotProps> = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const chatRef = useRef<Chat | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+    const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_PUBLIC_API_KEY! });
     chatRef.current = ai.chats.create({
       model: 'gemini-2.5-flash',
       config: {

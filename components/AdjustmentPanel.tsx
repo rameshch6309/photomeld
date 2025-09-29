@@ -19,6 +19,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
   const [customPrompt, setCustomPrompt] = useState('');
   const [blurIntensity, setBlurIntensity] = useState<number>(0);
   const [brightness, setBrightness] = useState<number>(0);
+  const [contrast, setContrast] = useState<number>(0);
   const [saturation, setSaturation] = useState<number>(0);
   const [vignetteIntensity, setVignetteIntensity] = useState<number>(0);
   const [vignetteColor, setVignetteColor] = useState<'black' | 'white'>('black');
@@ -44,6 +45,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setCustomPrompt('');
     setBlurIntensity(0);
     setBrightness(0);
+    setContrast(0);
     setSaturation(0);
     setVignetteIntensity(0);
   };
@@ -53,6 +55,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setSelectedPresetPrompt(null);
     setBlurIntensity(0);
     setBrightness(0);
+    setContrast(0);
     setSaturation(0);
     setVignetteIntensity(0);
   };
@@ -62,6 +65,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setSelectedPresetPrompt(null);
     setCustomPrompt('');
     setBrightness(0);
+    setContrast(0);
     setSaturation(0);
     setVignetteIntensity(0);
   };
@@ -71,6 +75,17 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setSelectedPresetPrompt(null);
     setCustomPrompt('');
     setBlurIntensity(0);
+    setContrast(0);
+    setSaturation(0);
+    setVignetteIntensity(0);
+  };
+
+  const handleContrastChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContrast(Number(e.target.value));
+    setSelectedPresetPrompt(null);
+    setCustomPrompt('');
+    setBlurIntensity(0);
+    setBrightness(0);
     setSaturation(0);
     setVignetteIntensity(0);
   };
@@ -81,6 +96,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setCustomPrompt('');
     setBlurIntensity(0);
     setBrightness(0);
+    setContrast(0);
     setVignetteIntensity(0);
   };
 
@@ -90,6 +106,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     setCustomPrompt('');
     setBlurIntensity(0);
     setBrightness(0);
+    setContrast(0);
     setSaturation(0);
   };
 
@@ -101,6 +118,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
         setCustomPrompt('');
         setBlurIntensity(0);
         setBrightness(0);
+        setContrast(0);
         setSaturation(0);
       }
   }
@@ -122,6 +140,13 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
     if (brightness !== 0) {
       const brightnessPrompt = `Adjust the overall brightness of the image by a value of ${brightness} on a scale from -100 to 100. A positive value increases brightness, making the image lighter, and a negative value decreases it, making the image darker. The change should be applied smoothly across all tonal ranges.`;
       onApplyAdjustment(brightnessPrompt);
+    }
+  };
+  
+  const handleApplyContrast = () => {
+    if (contrast !== 0) {
+      const prompt = `Adjust the overall contrast of the image by a value of ${contrast} on a scale from -100 to 100. A positive value increases contrast, making whites brighter and blacks darker, while a negative value decreases it, making the image appear flatter. The adjustment must be photorealistic and avoid color clipping or artifacts.`;
+      onApplyAdjustment(prompt);
     }
   };
   
@@ -183,7 +208,7 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
         <div className="flex-grow h-px bg-gray-600/50"></div>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <div className="bg-black/20 p-4 rounded-lg flex flex-col gap-3">
             <div className="flex items-center justify-between">
             <label htmlFor="blur-slider" className="font-semibold text-gray-200">
@@ -248,6 +273,40 @@ const AdjustmentPanel: React.FC<AdjustmentPanelProps> = ({ onApplyAdjustment, on
                 title="Apply the selected brightness adjustment"
                 >
                 Apply Brightness ({brightness > 0 ? '+' : ''}{brightness})
+                </button>
+            </div>
+            )}
+        </div>
+        <div className="bg-black/20 p-4 rounded-lg flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+            <label htmlFor="contrast-slider" className="font-semibold text-gray-200">
+                Contrast
+            </label>
+            <span className="text-sm font-mono bg-gray-700/50 px-2 py-1 rounded">
+                {contrast > 0 ? '+' : ''}{contrast}
+            </span>
+            </div>
+            <input
+            id="contrast-slider"
+            type="range"
+            min="-100"
+            max="100"
+            step="5"
+            value={contrast}
+            onChange={handleContrastChange}
+            disabled={isLoading}
+            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+            title="Adjust the image contrast"
+            />
+            {contrast !== 0 && (
+            <div className="animate-fade-in">
+                <button
+                onClick={handleApplyContrast}
+                className="w-full mt-2 bg-gradient-to-br from-blue-600 to-cyan-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out shadow-lg shadow-cyan-500/20 hover:shadow-xl hover:shadow-cyan-500/40 hover:-translate-y-px active:scale-95 active:shadow-inner text-base disabled:from-blue-800 disabled:to-cyan-700 disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none"
+                disabled={isLoading}
+                title="Apply the selected contrast adjustment"
+                >
+                Apply Contrast ({contrast > 0 ? '+' : ''}{contrast})
                 </button>
             </div>
             )}

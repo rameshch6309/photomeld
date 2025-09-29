@@ -4,7 +4,7 @@
 */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI, LiveServerMessage, Modality, Blob as GenAIBlob, LiveSession } from '@google/genai';
+import { GoogleGenAI, LiveServerMessage, Modality, Blob as GenAIBlob } from '@google/genai';
 import { systemInstruction } from '../services/chatService';
 import { CloseIcon, MicrophoneIcon } from './icons';
 
@@ -56,7 +56,7 @@ const VoiceChatBot: React.FC<VoiceChatBotProps> = ({ onClose }) => {
     const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
     const [status, setStatus] = useState('Initializing...');
     
-    const sessionPromiseRef = useRef<Promise<LiveSession> | null>(null);
+    const sessionPromiseRef = useRef<Promise<any> | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const inputAudioContextRef = useRef<AudioContext | null>(null);
     const outputAudioContextRef = useRef<AudioContext | null>(null);
@@ -111,7 +111,7 @@ const VoiceChatBot: React.FC<VoiceChatBotProps> = ({ onClose }) => {
             outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
             const outputNode = outputAudioContextRef.current.createGain();
             
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+            const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_PUBLIC_API_KEY! });
             
             sessionPromiseRef.current = ai.live.connect({
                 model: 'gemini-2.5-flash-native-audio-preview-09-2025',
